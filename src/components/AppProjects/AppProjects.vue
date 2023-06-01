@@ -1,5 +1,5 @@
 <template>
-  <div class="projects">
+  <div class="projects" v-if="projects.length">
     <AppProject v-for="project in projects"
                 :project="project"
                 :key="project.id"
@@ -8,6 +8,7 @@
                 @addNewRoom="addNewRoom"
                 @openCreateModal="openCreateModal"/>
   </div>
+  <p class="notification" v-else>Проекты не найдены!</p>
 </template>
 
 <script>

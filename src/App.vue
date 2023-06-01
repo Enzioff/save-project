@@ -9,6 +9,12 @@
     <div class="save-project__wrapper">
       <div class="save-project__header">
         <h2 class="save-project__title">Сохранить в «Мои проекты»</h2>
+        <button class="save-project__close" @click="closeProject">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+            <path fill="#4A4A4A"
+                  d="M25.335 8.88 23.455 7 16 14.453 8.548 7l-1.88 1.88 7.453 7.453-7.453 7.454 1.88 1.88 7.453-7.454 7.454 7.454 1.88-1.88-7.454-7.454 7.454-7.453Z"/>
+          </svg>
+        </button>
         <AppSearch @searchText="searchedData"/>
       </div>
       <div class="save-project__content">
@@ -24,21 +30,6 @@
         <TheButton @click="openCreateProjectModal">Создать проект</TheButton>
       </div>
     </div>
-    <button class="save-project__close" @click="windowIsOpen = false">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g clip-path="url(#clip0_878_26964)">
-          <path
-              d="M25.3346 8.88L23.4546 7L16.0013 14.4533L8.54797 7L6.66797 8.88L14.1213 16.3333L6.66797 23.7867L8.54797 25.6667L16.0013 18.2133L23.4546 25.6667L25.3346 23.7867L17.8813 16.3333L25.3346 8.88Z"
-              fill="#4A4A4A"/>
-        </g>
-        <defs>
-          <clipPath id="clip0_878_26964">
-            <rect width="32" height="32" fill="white"/>
-          </clipPath>
-        </defs>
-      </svg>
-
-    </button>
   </div>
   <AppModal v-model:modal-is-open="modalProjectIsOpen" @createNewProject="createNewProject" :modalId="1">
     <template v-slot:header>Создание проекта</template>
@@ -84,6 +75,11 @@ export default {
           .then(response => console.log(response))
           .catch(e => console.error(e))
     },
+    closeProject() {
+      this.modalProjectIsOpen = false;
+      this.modalRoomIsOpen = false;
+      this.windowIsOpen = false;
+    },
     addNewRoom(room) {
       this.projects.map(el => {
         if (el.id === room.roomId) {
@@ -101,9 +97,11 @@ export default {
     },
     openCreateProjectModal() {
       this.modalProjectIsOpen = !this.modalProjectIsOpen
+      this.modalRoomIsOpen = false;
     },
     openCreateRoomModal() {
       this.modalRoomIsOpen = !this.modalRoomIsOpen
+      this.modalProjectIsOpen = false;
     },
     searchedData(text) {
       this.searchedText = text;
@@ -147,7 +145,7 @@ export default {
       this.object.isDragging = false;
     },
     fetchingData() {
-      axios.get('http://localhost:3001/projects')
+      axios.get(this.url)
           .then(response => {
             setTimeout(() => {
               this.projects.push(...response.data)
@@ -165,15 +163,17 @@ export default {
     console.log('Vue скрипт загружен !')
     const products = document.querySelectorAll('[data--catalog-product]');
     products.forEach(el => {
-      const addToProjectBtn = el.querySelector('[data-button-open]');
-      addToProjectBtn.addEventListener('click', () => {
-        this.windowIsOpen = true;
-        this.currentProduct = el.querySelector('.article-product__title').textContent.replace(/\s /g, '')
+      const addToProjectBtn = el.querySelectorAll('[data-button-open]');
+      addToProjectBtn.forEach(buttons => {
+        buttons.addEventListener('click', () => {
+          this.windowIsOpen = true;
+          this.currentProduct = el.querySelector('.article-product__title').textContent.replace(/\s /g, '')
+        })
       })
     })
     this.fetchingData();
     window.addEventListener('keydown', evt => {
-      evt.keyCode === 27 ? this.windowIsOpen = false : this.windowIsOpen = true;
+      evt.keyCode === 27 ? this.closeProject() : this.windowIsOpen = true;
     })
   }
 }
@@ -247,14 +247,55 @@ export default {
     padding: 0;
     margin: 0;
     background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
     border: none;
     cursor: pointer;
+
+    svg {
+      display: flex;
+      width: 25px;
+      height: 25px;
+    }
   }
 
   &__footer {
     padding-top: 10px;
     margin-top: auto;
     border-top: 1px solid #EFF0F2;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .save-project {
+    position: fixed;
+    bottom: -1px;
+    left: 0;
+    padding-top: 30px;
+    width: 100%;
+    height: calc(100% - 60px);
+    transform: translate(0, 0) !important;
+    box-shadow: none;
+    border-bottom: 1px solid;
+    border-radius: 0;
+
+    &__header {
+      padding: 0 20px;
+    }
+
+    &__close {
+      top: 30px;
+      right: 20px;
+      width: 20px;
+      height: 20px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
 </style>

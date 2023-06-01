@@ -20,7 +20,7 @@
           ]
         },
         {
-          "roomId": 0,
+          "roomId": 1,
           "id": 1,
           "roomTitle": "Спальня",
           "picture": "https://мебельная-фабрика-имени-бадаева.рф/d/spalni_2021_goda.jpg",
@@ -34,7 +34,7 @@
           ]
         },
         {
-          "roomId": 0,
+          "roomId": 2,
           "id": 2,
           "roomTitle": "Детская",
           "picture": "https://gracia-mebel.ru/wp-content/uploads/2018/12/detskaya-komnata-v-biryuzovykh-tonakh5.jpg",
@@ -51,12 +51,12 @@
     },
     {
       "id": 1,
-      "title": "Квартира на ул.А.Невского",
+      "title": "Квартира в Москве",
       "picture": "https://almode.ru/uploads/posts/2021-06/1624025148_6-almode_ru-p-luchshie-intereri-kvartir-7.jpg",
       "rooms": [
         {
-          "roomId": 1,
-          "id": 1,
+          "roomId": 0,
+          "id": 0,
           "roomTitle": "Гостиная",
           "picture": "https://almode.ru/uploads/posts/2021-07/1625496153_28-almode_ru-p-kvartira-v-stile-modern-29.jpg",
           "materials": [

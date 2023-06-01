@@ -5,6 +5,17 @@
         <h2 class="modal__title">
           <slot name="header"></slot>
         </h2>
+        <button class="modal__close" @click="closeModal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+            <g>
+              <path fill="#4A4A4A"
+                    d="M25.335 8.88 23.455 7 16 14.453 8.548 7l-1.88 1.88 7.453 7.453-7.453 7.454 1.88 1.88 7.453-7.454 7.454 7.454 1.88-1.88-7.454-7.454 7.454-7.453Z"/>
+            </g>
+            <defs>
+                <path fill="#fff" d="M0 0h32v32H0z"/>
+            </defs>
+          </svg>
+        </button>
       </div>
       <div class="modal__content">
         <picture class="modal__picture">
@@ -16,7 +27,8 @@
           </p>
           <label>
             <input class="modal__input" type="text" v-model="name" :placeholder="placeholder">
-            <span class="dangerous hidden" ref="dangerous">Ошибка! Название должно состоять минимум из 3-х символов!</span>
+            <span class="dangerous hidden"
+                  ref="dangerous">Ошибка! Название должно состоять минимум из 3-х символов!</span>
           </label>
           <div class="modal__file">
             <input type="file" @change="onFileChange">
@@ -152,6 +164,7 @@ export default {
   z-index: 103;
 
   &__container {
+    position: relative;
     display: flex;
     flex-direction: column;
     row-gap: 30px;
@@ -180,6 +193,27 @@ export default {
 
     &::placeholder {
       color: #838383;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
     }
   }
 
@@ -258,9 +292,11 @@ export default {
 
     &:hover {
       background-color: #6DA1BD;
+
       .modal__icon {
         fill: #fff;
       }
+
       p {
         color: #fff;
       }
@@ -291,6 +327,60 @@ export default {
       line-height: 20px;
       color: #6DA1BD;
       transition: all .2s linear;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .modal {
+    top: inherit;
+    left: 0;
+    right: inherit;
+    bottom: 90px;
+    width: 100%;
+    height: calc(100% - 151px);
+    background-color: transparent;
+
+    &__container {
+      padding: 30px 20px 20px;
+      height: 100%;
+      max-width: 100%;
+    }
+
+    &__header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #EFF0F2;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+
+      label {
+        margin-bottom: 20px;
+      }
+    }
+
+    &__title {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    &__text {
+      margin-bottom: 10px;
+      max-width: 100%;
+    }
+
+    &__close {
+      top: 30px;
+      right: 20px;
+      width: 20px;
+      height: 20px;
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

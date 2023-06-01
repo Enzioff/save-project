@@ -1,21 +1,11 @@
-body {
-    margin: 0;
-    padding: 0;
-
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    line-height: 1.2;
-
-}
-
-* {
-    box-sizing: border-box;
-}
-
 .hidden {
     display: none;
 }
 
 .dangerous {
     color: red;
+}
+
+.notification {
+    margin: 0 30px;
 }

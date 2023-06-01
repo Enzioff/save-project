@@ -3,9 +3,9 @@
     <picture class="room__picture" @click="showInfo">
       <img :src="room.picture" :class="{'empty': room.picture.includes('.svg')}" :alt="room.roomTitle">
     </picture>
-    <div class="room__info">
+    <div class="room__info" @click="saveToRoom">
       <h3 class="room__title">{{ room.roomTitle }}</h3>
-      <TheButton class="v-button--save" @click="saveToRoom">{{ isSaved ? 'Добавлено' : 'Сохранить' }}</TheButton>
+      <TheButton class="v-button--save" @click.stop="saveToRoom">{{ isSaved ? 'Добавлено' : 'Сохранить' }}</TheButton>
     </div>
   </div>
 </template>
@@ -108,6 +108,16 @@ export default {
     column-gap: 7px;
     width: 100%;
     overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .room {
+    &:hover {
+      .v-button {
+        display: none;
+      }
+    }
   }
 }
 </style>

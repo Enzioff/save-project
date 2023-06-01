@@ -97,4 +97,10 @@ export default {}
     }
   }
 }
+
+@media screen and (max-width: 1200px) {
+  .v-button--save {
+    display: none;
+  }
+}
 </style>
