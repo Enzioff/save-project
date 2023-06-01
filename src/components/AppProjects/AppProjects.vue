@@ -26,9 +26,6 @@ export default {
     openCreateModal() {
       this.$emit('openCreateModal', true)
     },
-    createNewRoom(room) {
-      console.log(room)
-    }
   }
 }
 </script>

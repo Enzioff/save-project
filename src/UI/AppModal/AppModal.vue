@@ -8,13 +8,16 @@
       </div>
       <div class="modal__content">
         <picture class="modal__picture">
-          <img :src="setImage" alt="">
+          <img :src="setImage" :class="{'empty': setImage.includes('.svg')}" alt="">
         </picture>
         <div class="modal__info">
           <p class="modal__text">
             <slot name="text"></slot>
           </p>
-          <input class="modal__input" type="text" v-model="name" :placeholder="placeholder">
+          <label>
+            <input class="modal__input" type="text" v-model="name" :placeholder="placeholder">
+            <span class="dangerous hidden" ref="dangerous">Ошибка! Название должно состоять минимум из 3-х символов!</span>
+          </label>
           <div class="modal__file">
             <input type="file" @change="onFileChange">
             <svg class="modal__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 23" fill="none">
@@ -41,6 +44,8 @@
 <script>
 
 import TheButton from "@/UI/TheButton/TheButton.vue";
+
+import logo from '@/assets/icon-logo.svg'
 
 export default {
   components: {TheButton},
@@ -95,14 +100,23 @@ export default {
     createFunc() {
       if (this.modalId === 1) {
         this.createNewProject();
+        this.nameValidation();
       } else {
         this.createNewRoom();
+        this.nameValidation();
       }
     },
     onFileChange(evt) {
       const file = evt.target.files[0]
       this.fileName = evt.target.files[0].name
       this.imageUrl = URL.createObjectURL(file)
+    },
+    nameValidation() {
+      if (this.name.length >= 3) {
+        this.$refs.dangerous.classList.add('hidden');
+      } else {
+        this.$refs.dangerous.classList.remove('hidden');
+      }
     }
   },
   computed: {
@@ -117,7 +131,7 @@ export default {
       if (this.imageUrl !== null) {
         return this.imageUrl
       } else {
-        return 'https://via.placeholder.com/1920x1080/'
+        return logo
       }
     }
   }
@@ -156,7 +170,6 @@ export default {
 
   &__input {
     display: flex;
-    margin-bottom: 30px;
     padding: 13px 20px;
     font-weight: 500;
     font-size: 16px;
@@ -174,6 +187,15 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
   }
 
   &__text {
@@ -192,9 +214,14 @@ export default {
     flex-shrink: 0;
     width: 270px;
     height: 270px;
-    background-color: #000;
+    background-color: #DAE8F0;
     border-radius: 6px;
     overflow: hidden;
+
+    .empty {
+      width: 132px;
+      height: auto;
+    }
 
     img {
       display: block;

@@ -1,7 +1,7 @@
 <template>
   <div class="room">
     <picture class="room__picture" @click="showInfo">
-      <img :src="room.picture" :alt="room.roomTitle">
+      <img :src="room.picture" :class="{'empty': room.picture.includes('.svg')}" :alt="room.roomTitle">
     </picture>
     <div class="room__info">
       <h3 class="room__title">{{ room.roomTitle }}</h3>
@@ -72,19 +72,23 @@ export default {
     }
   }
 
+  .empty {
+    padding: 10px;
+  }
+
   &__picture {
     display: flex;
     width: 50px;
     height: 50px;
     flex-shrink: 0;
-    background-color: #D9D9D9;
+    background-color: #DAE8F0;
     border-radius: 4px;
     overflow: hidden;
 
     img {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
       object-fit: cover;
       object-position: center;
     }

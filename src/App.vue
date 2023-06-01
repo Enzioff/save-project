@@ -18,7 +18,7 @@
                      :currentProduct="currentProduct"
                      @addNewMaterial="addSavedMaterial"
                      @openCreateModal="openCreateRoomModal"/>
-        <p class="save-project__notification" v-else>Проекты не найдены!</p>
+        <TheLoader v-else/>
       </div>
       <div class="save-project__footer">
         <TheButton @click="openCreateProjectModal">Создать проект</TheButton>
@@ -56,9 +56,10 @@ import TheButton from "@/UI/TheButton/TheButton.vue";
 import AppProjects from "@/components/AppProjects/AppProjects.vue";
 import AppModal from "@/UI/AppModal/AppModal.vue";
 import axios from "axios";
+import TheLoader from "@/UI/TheLoader/TheLoader.vue";
 
 export default {
-  components: {AppModal, AppProjects, TheButton, AppSearch},
+  components: {TheLoader, AppModal, AppProjects, TheButton, AppSearch},
   data() {
     return {
       projects: [],
@@ -148,7 +149,9 @@ export default {
     fetchingData() {
       axios.get('http://localhost:3001/projects')
           .then(response => {
-            this.projects.push(...response.data)
+            setTimeout(() => {
+              this.projects.push(...response.data)
+            }, 2000)
           })
           .catch(e => console.error(e))
     }
@@ -169,6 +172,9 @@ export default {
       })
     })
     this.fetchingData();
+    window.addEventListener('keydown', evt => {
+      evt.keyCode === 27 ? this.windowIsOpen = false : this.windowIsOpen = true;
+    })
   }
 }
 </script>
