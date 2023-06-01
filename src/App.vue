@@ -1,9 +1,11 @@
 <template>
   <div class="save-project"
        v-if="windowIsOpen"
-       draggable="true"
-       @dragstart="onDragStart($event, this)"
-       @dragend="targetWindow($event)">
+       ref="draggable"
+       :style="{'transform': `translate(${object.x}px, ${object.y}px)`}"
+       @mousedown="startDrag"
+       @mousemove="drag"
+       @mouseup="stopDrag">
     <div class="save-project__wrapper">
       <div class="save-project__header">
         <h2 class="save-project__title">Сохранить в «Мои проекты»</h2>
@@ -14,7 +16,7 @@
                      @addNewRoom="(id) => roomId = id"
                      v-if="projects.length"
                      :currentProduct="currentProduct"
-                     @savedMaterial="addSavedMaterial"
+                     @addNewMaterial="addSavedMaterial"
                      @openCreateModal="openCreateRoomModal"/>
         <p class="save-project__notification" v-else>Проекты не найдены!</p>
       </div>
@@ -53,6 +55,7 @@ import AppSearch from "@/components/AppSearch/AppSearch.vue";
 import TheButton from "@/UI/TheButton/TheButton.vue";
 import AppProjects from "@/components/AppProjects/AppProjects.vue";
 import AppModal from "@/UI/AppModal/AppModal.vue";
+import axios from "axios";
 
 export default {
   components: {AppModal, AppProjects, TheButton, AppSearch},
@@ -63,21 +66,35 @@ export default {
       modalProjectIsOpen: false,
       modalRoomIsOpen: false,
       roomId: null,
-      movedEl: null,
-      pageX: null,
-      pageY: null,
       windowIsOpen: false,
       currentProduct: '',
+      url: 'http://localhost:3001/projects/',
+      object: {
+        isDragging: false,
+        x: 0,
+        y: 0,
+      }
     }
   },
   methods: {
     createNewProject(project) {
       this.projects.push(project)
+      axios.post(this.url, project)
+          .then(response => console.log(response))
+          .catch(e => console.error(e))
     },
     addNewRoom(room) {
       this.projects.map(el => {
         if (el.id === room.roomId) {
           el.rooms.push(room)
+          console.log(el.id)
+          axios.put(this.url + el.id, el)
+              .then(response => {
+                console.log('Данные успешно обновлены:', response.data);
+              })
+              .catch(error => {
+                console.error('Ошибка при обновлении данных:', error);
+              });
         }
       })
     },
@@ -91,29 +108,55 @@ export default {
       this.searchedText = text;
     },
     addSavedMaterial(material, roomId, id) {
+      console.log(material)
       this.projects.map(project => {
         project.rooms.map(room => {
           if (room.id === id) {
             console.log('Материал: ' + material + ' добавлен!')
             room.materials.push(material)
+            axios.put(this.url + project.id, project)
+                .then(response => {
+                  console.log('Данные успешно обновлены:', response.data);
+                })
+                .catch(error => {
+                  console.error('Ошибка при обновлении данных:', error);
+                });
           }
         })
       })
     },
-    onDragStart(evt) {
-      this.movedEl = evt.target;
+    startDrag(event) {
+      this.object.isDragging = true;
+      this.object.prevX = event.clientX;
+      this.object.prevY = event.clientY;
     },
-    targetWindow(evt) {
-      this.pageX = evt.clientX;
-      this.pageY = evt.clientY;
-      this.movedEl.style.left = this.pageX - this.movedEl.clientWidth / 2 + 'px';
-      this.movedEl.style.top = this.pageY - this.movedEl.clientHeight / 2 + 'px';
+    drag(event) {
+      if (this.object.isDragging) {
+        const deltaX = event.clientX - this.object.prevX;
+        const deltaY = event.clientY - this.object.prevY;
+
+        this.object.x += deltaX;
+        this.object.y += deltaY;
+
+        this.object.prevX = event.clientX;
+        this.object.prevY = event.clientY;
+      }
     },
+    stopDrag() {
+      this.object.isDragging = false;
+    },
+    fetchingData() {
+      axios.get('http://localhost:3001/projects')
+          .then(response => {
+            this.projects.push(...response.data)
+          })
+          .catch(e => console.error(e))
+    }
   },
   computed: {
     filteredProjects() {
       return [...this.projects].filter(el => el.title.toLowerCase().includes(this.searchedText.toLowerCase()))
-    },
+    }
   },
   mounted() {
     console.log('Vue скрипт загружен !')
@@ -125,7 +168,8 @@ export default {
         this.currentProduct = el.querySelector('.article-product__title').textContent.replace(/\s /g, '')
       })
     })
-  },
+    this.fetchingData();
+  }
 }
 </script>
 

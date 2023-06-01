@@ -2,7 +2,7 @@
   <div class="project">
     <h3 class="project__title">{{ project.title }}</h3>
     <AppProjectRooms :projectRooms="project.rooms"
-                     @savedMaterial="(savedMaterial, roomId, id) => this.$emit('savedMaterial', savedMaterial, roomId, id)"
+                     @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                      :currentProduct="currentProduct"/>
     <TheButton class="" @click="openCreateModal">Добавить комнату</TheButton>
   </div>

@@ -3,7 +3,7 @@
     <AppProjectRoom v-for="room in projectRooms"
                     :room="room"
                     :key="room.id"
-                    @savedMaterial="(savedMaterial, roomId, id) => this.$emit('savedMaterial', savedMaterial, roomId, id)"
+                    @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                     :currentProduct="currentProduct"/>
   </div>
 </template>

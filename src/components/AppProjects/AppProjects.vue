@@ -4,7 +4,7 @@
                 :project="project"
                 :key="project.id"
                 :currentProduct="currentProduct"
-                @savedMaterial="(savedMaterial, roomId, id) => this.$emit('savedMaterial', savedMaterial, roomId, id)"
+                @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                 @addNewRoom="addNewRoom"
                 @openCreateModal="openCreateModal"/>
   </div>

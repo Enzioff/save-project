@@ -32,7 +32,13 @@ export default {
     },
     saveToRoom() {
       this.isSaved = true;
-      this.$emit('savedMaterial', this.currentProduct, this.room.roomId, this.room.id)
+      const material = {
+        id: Date.now(),
+        name: this.currentProduct,
+        article: 8252791,
+        price: 223500
+      }
+      this.$emit('addNewMaterial', material, this.room.roomId, this.room.id)
       setTimeout(() => {
         this.isSaved = false;
       }, 1000)
