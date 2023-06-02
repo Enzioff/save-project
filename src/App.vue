@@ -173,7 +173,7 @@ export default {
     })
     this.fetchingData();
     window.addEventListener('keydown', evt => {
-      evt.keyCode === 27 ? this.closeProject() : this.windowIsOpen = true;
+      evt.keyCode === 27 ? this.closeProject() : null;
     })
   }
 }
@@ -271,7 +271,7 @@ export default {
 @media screen and (max-width: 1200px) {
   .save-project {
     position: fixed;
-    bottom: -1px;
+    top: 61px;
     left: 0;
     padding-top: 30px;
     width: 100%;

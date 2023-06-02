@@ -3,7 +3,29 @@
 }
 
 .dangerous {
-    color: red;
+    color: #F25220;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.dangerous .modal__input {
+    border-color: #F25220;
+}
+
+.modal-warning__icon {
+    width: 16px;
+    height: 16px;
+    fill: #F25220;
+}
+
+.dangerous .modal-warning {
+    display: flex;
+}
+
+.modal-warning {
+    display: none;
+    align-items: center;
+    column-gap: 10px;
 }
 
 .notification {

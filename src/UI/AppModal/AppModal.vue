@@ -25,10 +25,16 @@
           <p class="modal__text">
             <slot name="text"></slot>
           </p>
-          <label>
+          <label ref="dangerous" class="">
             <input class="modal__input" type="text" v-model="name" :placeholder="placeholder">
-            <span class="dangerous hidden"
-                  ref="dangerous">Ошибка! Название должно состоять минимум из 3-х символов!</span>
+            <span class="modal-warning">
+                <svg class="modal-warning__icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.133 14.9008H0.866653C0.552212 14.9008 0.271342 14.7379 0.115157 14.4648C-0.0406723 14.1914 -0.038237 13.8667 0.121765 13.5956L7.25472 1.52466C7.41212 1.25857 7.69038 1.09961 7.99994 1.09961C8.30934 1.09961 8.58777 1.25857 8.74516 1.52466L15.8781 13.5956C16.0379 13.8667 16.0406 14.1915 15.8847 14.4648C15.7279 14.7379 15.4473 14.9008 15.133 14.9008Z" fill="#F25220"/>
+                  <path d="M8.00002 10.9998C7.66471 10.9998 7.38191 10.7487 7.34242 10.4155L6.80169 5.81762C6.77995 5.62962 6.83908 5.4411 6.96465 5.29987C7.08987 5.15917 7.2704 5.07812 7.45925 5.07812H8.54102C8.72954 5.07812 8.91042 5.15917 9.03562 5.30004C9.16119 5.44126 9.22066 5.63014 9.19858 5.81744L8.65754 10.4148C8.61806 10.7484 8.33535 10.9998 8.00002 10.9998Z" fill="white"/>
+                  <path d="M7.99993 13.6541C7.48445 13.6541 7.06496 13.2346 7.06496 12.7192C7.06496 12.2037 7.48444 11.7842 7.99993 11.7842C8.51542 11.7842 8.9349 12.2037 8.9349 12.7192C8.9349 13.2346 8.51542 13.6541 7.99993 13.6541Z" fill="white"/>
+                </svg>
+                Поле заполнено некорректно
+            </span>
           </label>
           <div class="modal__file">
             <input type="file" @change="onFileChange">
@@ -124,10 +130,10 @@ export default {
       this.imageUrl = URL.createObjectURL(file)
     },
     nameValidation() {
-      if (this.name.length >= 3) {
-        this.$refs.dangerous.classList.add('hidden');
+      if (this.name.length <= 3) {
+        this.$refs.dangerous.classList.add('dangerous');
       } else {
-        this.$refs.dangerous.classList.remove('hidden');
+        this.$refs.dangerous.classList.remove('dangerous');
       }
     }
   },
@@ -179,6 +185,7 @@ export default {
     display: flex;
     align-items: flex-start;
     column-gap: 30px;
+    overflow-y: auto;
   }
 
   &__input {
@@ -336,9 +343,9 @@ export default {
     top: inherit;
     left: 0;
     right: inherit;
-    bottom: 90px;
+    bottom: 0;
     width: 100%;
-    height: calc(100% - 151px);
+    height: calc(100% - 61px);
     background-color: transparent;
 
     &__container {
