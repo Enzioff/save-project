@@ -71,6 +71,7 @@ export default {
     modalIsOpen: Boolean,
     modalId: Number,
     roomId: Number,
+    productId: Number,
   },
   data() {
     return {
@@ -101,6 +102,7 @@ export default {
     },
     createNewRoom() {
       const newRoom = {
+        projectId: 123,
         roomId: this.roomId,
         id: Date.now(),
         roomTitle: this.name,

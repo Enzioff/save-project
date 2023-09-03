@@ -3,6 +3,7 @@
     <AppProjectRoom v-for="room in projectRooms"
                     :room="room"
                     :key="room.id"
+                    :productId="productId"
                     @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                     :currentProduct="currentProduct"/>
   </div>
@@ -16,6 +17,7 @@ export default {
   props: {
     projectRooms: Object,
     currentProduct: String,
+    productId: Number,
   }
 }
 </script>

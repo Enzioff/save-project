@@ -25,6 +25,7 @@ export default {
   props: {
     room: Object,
     currentProduct: String,
+    productId: Number,
   },
   methods: {
     showInfo() {
@@ -33,10 +34,7 @@ export default {
     saveToRoom() {
       this.isSaved = true;
       const material = {
-        id: Date.now(),
-        name: this.currentProduct,
-        article: 8252791,
-        price: 223500
+        id: this.productId,
       }
       this.$emit('addNewMaterial', material, this.room.roomId, this.room.id)
       setTimeout(() => {

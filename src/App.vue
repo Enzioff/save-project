@@ -22,6 +22,7 @@
                      @addNewRoom="(id) => roomId = id"
                      v-if="projects.length"
                      :currentProduct="currentProduct"
+                     :productId="productId"
                      @addNewMaterial="addSavedMaterial"
                      @openCreateModal="openCreateRoomModal"/>
         <TheLoader v-else/>
@@ -61,6 +62,7 @@ export default {
       windowIsOpen: false,
       currentProduct: '',
       url: 'http://localhost:3001/projects/',
+      productId: null,
       object: {
         isDragging: false,
         x: 0,
@@ -82,17 +84,14 @@ export default {
     },
     addNewRoom(room) {
       this.projects.map(el => {
-        if (el.id === room.roomId) {
-          el.rooms.push(room)
-          console.log(el.id)
-          axios.put(this.url + el.id, el)
-              .then(response => {
-                console.log('Данные успешно обновлены:', response.data);
-              })
-              .catch(error => {
-                console.error('Ошибка при обновлении данных:', error);
-              });
-        }
+        el.rooms.push(room)
+        axios.post(this.url, el)
+            .then(response => {
+              console.log('Данные успешно обновлены:', response.data);
+            })
+            .catch(error => {
+              console.error('Ошибка при обновлении данных:', error);
+            });
       })
     },
     openCreateProjectModal() {
@@ -107,13 +106,13 @@ export default {
       this.searchedText = text;
     },
     addSavedMaterial(material, roomId, id) {
-      console.log(material)
       this.projects.map(project => {
         project.rooms.map(room => {
           if (room.id === id) {
             console.log('Материал: ' + material + ' добавлен!')
             room.materials.push(material)
-            axios.put(this.url + project.id, project)
+            console.log('Данные успешно обновлены:', material);
+            axios.post(this.url + project.id, project)
                 .then(response => {
                   console.log('Данные успешно обновлены:', response.data);
                 })
@@ -164,8 +163,12 @@ export default {
     const products = document.querySelectorAll('[data--catalog-product]');
     products.forEach(el => {
       const addToProjectBtn = el.querySelectorAll('[data-button-open]');
+      const productId = el.querySelector('[data-item-id]');
       addToProjectBtn.forEach(buttons => {
         buttons.addEventListener('click', () => {
+          if (productId) {
+            this.productId = parseInt(productId.dataset.itemId);
+          }
           this.windowIsOpen = true;
           this.currentProduct = el.querySelector('.article-product__title').textContent.replace(/\s /g, '')
         })

@@ -2,6 +2,7 @@
   <div class="project">
     <h3 class="project__title">{{ project.title }}</h3>
     <AppProjectRooms :projectRooms="project.rooms"
+                     :productId="productId"
                      @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                      :currentProduct="currentProduct"/>
     <TheButton class="" @click="openCreateModal">Добавить комнату</TheButton>
@@ -17,6 +18,7 @@ export default {
   props: {
     project: Object,
     currentProduct: String,
+    productId: Number,
   },
   methods: {
     openCreateModal() {

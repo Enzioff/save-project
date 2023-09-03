@@ -4,6 +4,7 @@
                 :project="project"
                 :key="project.id"
                 :currentProduct="currentProduct"
+                :productId="productId"
                 @addNewMaterial="(material, roomId, id) => this.$emit('addNewMaterial', material, roomId, id)"
                 @addNewRoom="addNewRoom"
                 @openCreateModal="openCreateModal"/>
@@ -19,6 +20,7 @@ export default {
   props: {
     projects: Object,
     currentProduct: String,
+    productId: Number,
   },
   methods: {
     addNewRoom(id) {
